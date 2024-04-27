@@ -1,7 +1,9 @@
 import 'package:chat_application_iub_cse464/const_config/color_config.dart';
 import 'package:chat_application_iub_cse464/const_config/text_config.dart';
+import 'package:chat_application_iub_cse464/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:random_avatar/random_avatar.dart';
 
 class DiscoverPage extends StatefulWidget {
   const DiscoverPage({super.key});
@@ -37,7 +39,18 @@ class _DiscoverPageState extends State<DiscoverPage> {
                           color: Colors.white,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text(snapshot.data.docs[index]['email']),
+                            child: Row(
+                              children: [
+                                RandomAvatar(
+                                  snapshot.data.docs[index]['name'].toString(),
+                                  trBackground: false,
+                                  height: 40,
+                                  width: 40,
+                                ),
+                                const SizedBox(width: 10,),
+                                Text(snapshot.data.docs[index]['email']),
+                              ],
+                            )
                           ),),
                       );
                     },
