@@ -4,6 +4,7 @@ import 'package:chat_application_iub_cse464/widgets/input_widgets/simple_input_f
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:random_avatar/random_avatar.dart';
 
 import '../../../const_config/color_config.dart';
 import '../../../services/chat_service.dart';
@@ -31,6 +32,7 @@ class _ChatsPageState extends State<ChatsPage> {
                 builder: (context, AsyncSnapshot snapshot) {
                   if (snapshot.hasData && snapshot.connectionState == ConnectionState.active) {
                     var data = snapshot.data.docs;
+
                     return data.length != 0
                         ? ListView.builder(
                       itemCount: data.length,
@@ -38,18 +40,30 @@ class _ChatsPageState extends State<ChatsPage> {
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.all(2.0),
-                          child: Card(
-                            color: Colors.white,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(snapshot.data.docs[index]['message']),
-                                  Text(DateFormat('h:mm, d MMM').format(snapshot.data.docs[index]['time'].toDate()))
-                                ],
+                          child: Row(
+                            children: [
+                              RandomAvatar(
+                                snapshot.data.docs[index]['name'].toString(),
+                                trBackground: false,
+                                height: 40,
+                                width: 40,
                               ),
-                            ),),
+                              Card(
+                                color: Colors.white,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(snapshot.data.docs[index]['message']),
+
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Text(DateFormat('h:mm, d MMM').format(snapshot.data.docs[index]['time'].toDate()), style: TextStyle(fontSize: 10),)
+                            ],
+                          ),
                         );
                       },
                     )

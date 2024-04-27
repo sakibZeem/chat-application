@@ -1,6 +1,4 @@
 import 'package:chat_application_iub_cse464/const_config/color_config.dart';
-import 'package:chat_application_iub_cse464/const_config/text_config.dart';
-import 'package:chat_application_iub_cse464/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:random_avatar/random_avatar.dart';
