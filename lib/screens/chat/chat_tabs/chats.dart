@@ -3,6 +3,7 @@ import 'package:chat_application_iub_cse464/widgets/custom_buttons/Rouded_Action
 import 'package:chat_application_iub_cse464/widgets/input_widgets/simple_input_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../const_config/color_config.dart';
 import '../../../services/chat_service.dart';
@@ -41,7 +42,13 @@ class _ChatsPageState extends State<ChatsPage> {
                             color: Colors.white,
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text(snapshot.data.docs[index]['message']),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(snapshot.data.docs[index]['message']),
+                                  Text(DateFormat('h:mm, d MMM').format(snapshot.data.docs[index]['time'].toDate()))
+                                ],
+                              ),
                             ),),
                         );
                       },
