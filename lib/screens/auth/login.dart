@@ -1,9 +1,11 @@
 import 'package:chat_application_iub_cse464/screens/auth/sign_up.dart';
 import 'package:chat_application_iub_cse464/screens/chat/dashboard.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../const_config/color_config.dart';
 import '../../const_config/text_config.dart';
+import '../../services/utils/helper_functions.dart';
 import '../../services/utils/validators.dart';
 import '../../widgets/custom_buttons/Rouded_Action_Button.dart';
 import '../../widgets/input_widgets/password_input_field.dart';
@@ -21,6 +23,8 @@ class _LoginPageState extends State<LoginPage> {
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
+  final auth = FirebaseAuth.instance;
 
 
   @override
@@ -71,10 +75,36 @@ class _LoginPageState extends State<LoginPage> {
               
                         const SizedBox(height: 20),
                         RoundedActionButton(
-                            onClick: (){
+                            onClick: ()async{
+                              FocusScope.of(context).unfocus();
                               if(formKey.currentState!.validate())
                               {
-                                Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const Dashboard()));
+                                await auth.signInWithEmailAndPassword(
+                                    email: emailController.text.trim(),
+                                    password: passwordController.text.trim()
+                                ).then((value) {
+                                  if(value.user != null)
+                                  {
+                                    showSnackBar(
+                                        context: context,
+                                        title: "Successful",
+                                        height: 200,
+                                        message: "Welcome to Chat META",
+                                        failureMessage: false
+                                    );
+                                    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>const Dashboard()), (route) => false);
+                                  }
+                                  else
+                                  {
+                                    showSnackBar(
+                                        context: context,
+                                        title: "Error",
+                                        height: 200,
+                                        message: "Please try again later",
+                                        failureMessage: true
+                                    );
+                                  }
+                                });
                               }
                             },
                             width: size.width * 0.8,
@@ -90,7 +120,8 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             InkWell(
                                 onTap: () {
-                                  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>const SignUp()), (route) => false);
+                                  // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context)=>const SignUp()), (route) => false);
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const SignUp()));
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 4),
